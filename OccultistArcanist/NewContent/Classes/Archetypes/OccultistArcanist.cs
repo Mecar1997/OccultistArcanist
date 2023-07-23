@@ -25,13 +25,12 @@ namespace OccultistArcanist.NewContent.NewArchetypes
 {
     public static class OccultistArcanist
     {
-        static BlueprintCharacterClass wizard_class = BlueprintTools.GetBlueprint<BlueprintCharacterClass>("ba34257984f4c41408ce1dc2004e342e");
         static BlueprintCharacterClass archetype_class = BlueprintTools.GetBlueprint<BlueprintCharacterClass>("52dbfd8505e22f84fad8d702611f60b7");
         public static BlueprintArchetype archetype;
 
         private const string archetype_guid_name = "ArcanistOccultistArchetype";
         private const string archetype_name = "Occultist";
-        private const string archetype_description = "Not all arcanists peer inward to discern the deepest secrets of magic. Some look outward, connecting with extraplanar creatures and bartering for secrets, power, and favor..";
+        private const string archetype_description = "Not all arcanists peer inward to discern the deepest secrets of magic. Some look outward, connecting with extraplanar creatures and bartering for secrets, power, and favor.";
 
 
 
@@ -43,8 +42,7 @@ namespace OccultistArcanist.NewContent.NewArchetypes
         {
             createArchetype();
             createProgression();
-
-            archetype_class.m_Archetypes = archetype_class.m_Archetypes.AddItem(archetype.ToReference<BlueprintArchetypeReference>()).ToArray();
+            archetype_class.m_Archetypes = archetype_class.m_Archetypes.AddToArray(archetype.ToReference<BlueprintArchetypeReference>());
         }
 
 

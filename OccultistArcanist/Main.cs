@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Kingmaker.Blueprints.Classes;
 using OccultistArcanist.ModLogic;
 using TabletopTweaks.Core.Utilities;
 using UnityModManagerNet;
@@ -16,6 +17,12 @@ namespace OccultistArcanist {
             harmony.PatchAll();
             PostPatchInitializer.Initialize(HaddeqiModContext);
             return true;
+        }
+
+        internal static bool IsHomebrewArchetypesEnabled() //
+        {
+            var duplicate_archetype = BlueprintTools.GetBlueprint<BlueprintArchetype>("23d88af5a9470b845b893b31895b20c9");
+            return !(duplicate_archetype is null);
         }
 
         static void OnSaveGUI(UnityModManager.ModEntry modEntry) {
