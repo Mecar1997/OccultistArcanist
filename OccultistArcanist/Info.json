@@ -1,0 +1,14 @@
+﻿{
+  "AssemblyName": "OccultistArcanist.dll",
+  "Author": "Haddeqi",
+  "DisplayName": "Occultist Arcanist",
+  "EntryMethod": "OccultistArcanist.Main.Load",
+  "GameVersion": "2.1.0",
+  "HomePage": "",
+  "Id": "OccultistArcanist",
+  "ManagerVersion": "0.23.0",
+  "Repository": "",
+  "Requirements": [ "TabletopTweaks-Core" ],
+  "LoadAfter": [ "TabletopTweaks-Base" ],
+  "Version": "1.0.0"
+}

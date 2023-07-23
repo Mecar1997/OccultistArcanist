@@ -1,0 +1,24 @@
+﻿{
+  "NewSettingsOffByDefault": false,
+  "Spells": {
+    "DisableAll": false,
+    "Settings": {
+      
+    },
+    "IsExpanded": true
+  },
+  "NewClasses": {
+    "DisableAll": false,
+    "Settings": {
+      
+    },
+    "IsExpanded": true
+  },
+  "Feats": {
+    "DisableAll": false,
+    "Settings": {
+      
+    },
+    "IsExpanded": true
+  }
+}
