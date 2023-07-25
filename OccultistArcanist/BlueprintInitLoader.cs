@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker.Blueprints.JsonSystem;
+using OccultistArcanist.Config;
 
 namespace OccultistArcanist {
     internal class BlueprintInitLoader {
@@ -13,7 +14,13 @@ namespace OccultistArcanist {
                 Initialized = true;
 
 
-                NewContent.NewArchetypes.OccultistArcanist.load();
+                Changes.MetamagicsUpdate.load();
+                Engine.WizardSchools.RegisterSchools.register();
+
+                NewContent.Classes.Arcanist.load();
+                NewContent.Classes.Magus.load();
+                NewContent.Classes.Shaman.load();
+                NewContent.Classes.Wizard.load();
             }
         }
     }

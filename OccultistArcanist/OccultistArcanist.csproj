@@ -3,7 +3,6 @@
   <Import Project="..\packages\Aze.Publicise.MSBuild.Task.1.0.0\build\Aze.Publicise.MSBuild.Task.props" Condition="Exists('..\packages\Aze.Publicise.MSBuild.Task.1.0.0\build\Aze.Publicise.MSBuild.Task.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C03B79A7-F087-44A4-92E1-DD3EDFCA487B}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -162,11 +161,56 @@
     <Compile Include="BlueprintInitLoader.cs" />
     <Compile Include="Config\Fixes.cs" />
     <Compile Include="Config\AddedContent.cs" />
-    <Compile Include="NewContent\Archetypes\OccultistArcanist.cs" />
+    <Compile Include="Engines\WizardSchools\ArcaneCrafter.cs" />
+    <Compile Include="Engines\WizardSchools\UniversalistSchool.cs" />
+    <Compile Include="Engines\WizardSchools\TransmutationSchool.cs" />
+    <Compile Include="Engines\WizardSchools\NecromancySchool.cs" />
+    <Compile Include="Engines\WizardSchools\IllusionSchool.cs" />
+    <Compile Include="Engines\WizardSchools\EvocationSchool.cs" />
+    <Compile Include="Engines\WizardSchools\EnchantmentSchool.cs" />
+    <Compile Include="Engines\WizardSchools\DivinationSchool.cs" />
+    <Compile Include="Engines\WizardSchools\ConjurationSchool.cs" />
+    <Compile Include="Engines\WizardSchools\AbjurationSchool.cs" />
+    <Compile Include="Engines\WizardSchools\WizardSchool.cs" />
+    <Compile Include="Engines\WizardSchools\RegisterSchool.cs" />
+    <Compile Include="Changes\ElementalMasterArcanist.cs" />
+    <Compile Include="NewComponents\ActivatableAbilityRestriction\RestrictionHasEnoughResource.cs" />
+    <Compile Include="NewComponents\AbilityResourceLogicIfCastFromClass.cs" />
+    <Compile Include="NewComponents\NewInterfaces\SpontaneousMetamagicAbilityData.cs" />
+    <Compile Include="NewComponents\Patches\ArcanistMetamagic.cs" />
+    <Compile Include="NewComponents\Patches\SpellbookActionBarFix.cs" />
+    <Compile Include="NewComponents\ReachSpellstrikeComponent.cs" />
+    <Compile Include="NewComponents\ArcanistMetamixing.cs" />
+    <Compile Include="NewComponents\NewInterfaces\INoSpontaneousMetamagicTimeIncrease.cs" />
+    <Compile Include="NewComponents\NewUnitParts\AdditiveUnitPart.cs" />
+    <Compile Include="NewComponents\NewUnitParts\UnitPartSpontaneousMetamagic.cs" />
+    <Compile Include="NewComponents\Patches\LevelUpRecommendationEx.cs" />
+    <Compile Include="NewComponents\Patches\AutoMetamagicExtender.cs" />
+    <Compile Include="NewComponents\Patches\MetamagicForSpontaneousConversions.cs" />
+    <Compile Include="NewComponents\SpontaneousMetamagicMasteryComponent.cs" />
+    <Compile Include="NewComponents\Patches\MetamagicCastTime.cs" />
+    <Compile Include="NewComponents\MetamagicOnSpell.cs" />
+    <Compile Include="NewComponents\MetamagicsAdept.cs" />
+    <Compile Include="NewContent\Classes\Shaman.cs" />
+    <Compile Include="NewContent\Classes\Magus.cs" />
+    <Compile Include="NewContent\Classes\Wizard.cs" />
+    <Compile Include="NewContent\Classes\Archetypes\SchoolSavant.cs" />
+    <Compile Include="NewContent\Classes\Archetypes\OccultistArcanist.cs" />
+    <Compile Include="NewContent\Classes\Arcanist.cs" />
+    <Compile Include="Changes\MetamagicsUpdate.cs" />
+    <Compile Include="NewContent\ClassFeatures\ArcanistExploits\ArcaneDiscovery.cs" />
+    <Compile Include="NewContent\ClassFeatures\ArcanistExploits\SchoolUnderstanding.cs" />
+    <Compile Include="NewContent\ClassFeatures\ArcanistExploits\Metamixing.cs" />
+    <Compile Include="NewContent\ClassFeatures\ArcanistExploits\FeralShifting.cs" />
+    <Compile Include="NewContent\ClassFeatures\MagusArcanas\ReachSpellstrike.cs" />
+    <Compile Include="NewContent\Feats\NewFeats.cs" />
+    <Compile Include="NewContent\Feats\NewMythicFeats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="ModLogic\ModContextHaddeqiBase.cs" />
     <Compile Include="UMMSettingsUI.cs" />
+    <Compile Include="Utils\ComponentsHelpers.cs" />
+    <Compile Include="Utils\CureHarmSpells.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Utils\Common.cs" />
   </ItemGroup>
@@ -184,8 +228,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Fixes\" />
-    <Folder Include="NewComponents\" />
+    <Folder Include="NewComponents\NewActions\" />
+    <Folder Include="NewComponents\NewProperties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" AfterTargets="BeforeClean">

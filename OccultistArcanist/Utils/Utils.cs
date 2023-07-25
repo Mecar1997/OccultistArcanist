@@ -7,6 +7,7 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.JsonSystem;
+using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.Enums;
 using Kingmaker.Localization.Shared;
 using Kingmaker.ResourceLinks;
@@ -14,11 +15,14 @@ using Kingmaker.RuleSystem;
 using Kingmaker.UnitLogic.Abilities;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
+using Kingmaker.UnitLogic.ActivatableAbilities;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.Mechanics;
 using Kingmaker.Utility;
 using TabletopTweaks.Core.ModLogic;
 using TabletopTweaks.Core.Utilities;
+using static Kingmaker.UnitLogic.ActivatableAbilities.ActivatableAbilityResourceLogic;
+using static Kingmaker.UnitLogic.Commands.Base.UnitCommand;
 
 namespace OccultistArcanist {
     public static class Utils
@@ -50,6 +54,12 @@ namespace OccultistArcanist {
         public static void SetDescription(this BlueprintUnitFact feature, string description)
         {
             feature.m_Description = Helpers.CreateString(Main.HaddeqiModContext, feature.name + ".Description", description, Locale.enGB, shouldProcess: true);
+        }
+
+        public static void SetNameDescription(this BlueprintUnitFact feature, string name, string description)
+        {
+            feature.SetName(name);
+            feature.SetDescription(description);
         }
 
 
@@ -196,6 +206,100 @@ namespace OccultistArcanist {
             };
         }
 
+        //ActivatableAbilities
+        public static ActivatableAbilityResourceLogic CreateActivatableResourceLogic(this BlueprintAbilityResource resource,
+            ResourceSpendType spendType)
+        {
+            var logic = Helpers.Create<ActivatableAbilityResourceLogic>();
+            logic.m_RequiredResource = resource.ToReference<BlueprintAbilityResourceReference>();
+            logic.SpendType = spendType;
+            return logic;
+        }
 
+        static public BlueprintActivatableAbility buffToToggle(BlueprintBuff buff, CommandType command, bool deactivate_immediately, params BlueprintComponent[] components)
+        {
+
+            var toggle = Helpers.CreateBlueprint<BlueprintActivatableAbility>(Main.HaddeqiModContext, buff.name + "ToggleAbility", bp => {
+                bp.SetName(buff.m_DisplayName);
+                bp.SetDescription(buff.m_Description);
+                bp.m_Buff = buff.ToReference<BlueprintBuffReference>();
+                bp.m_Icon = buff.Icon;
+                bp.m_ActivateWithUnitCommand = command;
+                bp.ActivationType = command == CommandType.Free ? AbilityActivationType.Immediately : AbilityActivationType.WithUnitCommand;
+                bp.DeactivateImmediately = true;
+                bp.SetComponents(components);
+            });
+
+            toggle.DeactivateImmediately = deactivate_immediately;
+            return toggle;
+        }
+
+        static public BlueprintFeature ActivatableAbilityToFeature(BlueprintActivatableAbility ability, bool hide = true, string guid = "")
+        {
+            var feature = Helpers.CreateBlueprint<BlueprintFeature>(Main.HaddeqiModContext, ability.name + "Feature", bp => {
+                bp.SetName(ability.m_DisplayName);
+                bp.SetDescription(ability.m_Description);
+                bp.m_Icon = ability.Icon;
+                bp.Groups = new FeatureGroup[] { FeatureGroup.None };
+                bp.AddComponent<AddFeatureIfHasFact>(c => {
+                    c.m_Feature = ability.ToReference<BlueprintUnitFactReference>();
+                    c.m_CheckedFact = ability.ToReference<BlueprintUnitFactReference>();
+                    c.Not = true;
+                });
+            });
+
+            if (hide)
+            {
+                feature.HideInCharacterSheetAndLevelUp = true;
+                feature.HideInUI = true;
+            }
+            return feature;
+        }
+
+        //Archetypes
+        public static void addFeatureToArchetype(this BlueprintFeatureBase feature, BlueprintArchetype archetype, int level)
+        {
+            if (!archetype.AddFeatures.Where(a => a.Level == level).Any())
+            {
+                archetype.AddFeatures = archetype.AddFeatures.AddToArray(Helpers.CreateLevelEntry(level, feature));
+            }
+            else
+            {
+                var entry = archetype.AddFeatures.Where(a => a.Level == level).Concat(archetype.AddFeatures).FirstOrDefault();
+                entry.m_Features.Add(feature.ToReference<BlueprintFeatureBaseReference>());
+            }
+        }
+
+        public static void removeFeatureFromArchetype(this BlueprintFeatureBase feature, BlueprintArchetype archetype, int level)
+        {
+
+            if (!archetype.RemoveFeatures.Where(a => a.Level == level).Any())
+            {
+                archetype.RemoveFeatures = archetype.RemoveFeatures.AddToArray(Helpers.CreateLevelEntry(level, feature));
+            }
+            else
+            {
+                var entry = archetype.RemoveFeatures.Where(a => a.Level == level).Concat(archetype.RemoveFeatures).FirstOrDefault();
+                entry.m_Features.Add(feature.ToReference<BlueprintFeatureBaseReference>());
+            }
+        }
+
+        public static void deleteFeatureFromArchetype(this BlueprintFeatureBase feature, BlueprintArchetype archetype, bool remove = false)
+        {
+            if (remove && archetype.RemoveFeatures.Where(a => a.m_Features.Contains(feature)).Any())
+            {
+                foreach (var f in archetype.RemoveFeatures.Where(a => a.m_Features.Contains(feature)))
+                {
+                    f.m_Features.Remove(feature.ToReference<BlueprintFeatureBaseReference>());
+                }
+            }
+            else if (archetype.AddFeatures.Where(a => a.m_Features.Contains(feature)).Any())
+            {
+                foreach (var f in archetype.AddFeatures.Where(a => a.m_Features.Contains(feature)))
+                {
+                    f.m_Features.Remove(feature.ToReference<BlueprintFeatureBaseReference>());
+                }
+            }
+        }
     }
 }
